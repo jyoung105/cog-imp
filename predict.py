@@ -20,7 +20,7 @@ class Predictor(BasePredictor):
             cache_dir=MODEL_CACHE,
             trust_remote_code=True,
         )
-        self.model.device("cuda:0")
+        self.model.to("cuda:0")
 
     def predict(
         self,
@@ -33,7 +33,7 @@ class Predictor(BasePredictor):
         """Run a single prediction on the model"""
         input_ids = self.tokenizer(prompt, return_tensors="pt").input_ids
         image = Image.open(image)
-        image_tensor = self.model.image_preprocess(image).device("cuda:0")
+        image_tensor = self.model.image_preprocess(image).to("cuda:0")
         
         output_ids = self.model.generate(
             input_ids,
