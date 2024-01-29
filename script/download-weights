@@ -14,13 +14,11 @@ from predict import MODEL_NAME, MODEL_CACHE
 if not os.path.exists(MODEL_CACHE):
     os.makedirs(MODEL_CACHE)
 
-torch.set_default_device("cuda:0")
-
 tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME, trust_remote_code=True)
 model = AutoModelForCausalLM.from_pretrained(
     MODEL_NAME, 
     torch_dtype=torch.float16, 
-    device_map="auto",
+    device_map="cuda:0",
     trust_remote_code=True)
 
 model.save_pretrained(MODEL_CACHE)
