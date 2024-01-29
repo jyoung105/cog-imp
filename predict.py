@@ -32,7 +32,7 @@ class Predictor(BasePredictor):
     ) -> str:
         """Run a single prediction on the model"""
         prompt_template = f"A chat between a curious user and an artificial intelligence assistant. The assistant gives helpful, detailed, and polite answers to the user's questions. USER: <image>\n{prompt}. ASSISTANT:"
-        input_ids = self.tokenizer(prompt_template, return_tensors="pt").input_ids
+        input_ids = self.tokenizer(prompt_template, return_tensors="pt").input_ids.to("cuda")
         image = Image.open(image)
         image_tensor = self.model.image_preprocess(image).to("cuda")
         
