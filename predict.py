@@ -10,8 +10,6 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 MODEL_NAME = "MILVLG/imp-v1-3b"
 MODEL_CACHE = "model-cache"
 
-prompt_template = f"A chat between a curious user and an artificial intelligence assistant. The assistant gives helpful, detailed, and polite answers to the user's questions. USER: <image>\n{prompt}. ASSISTANT:"
-
 class Predictor(BasePredictor):
     def setup(self) -> None:
         """Load the model into memory to make running multiple predictions efficient"""
@@ -22,12 +20,12 @@ class Predictor(BasePredictor):
             cache_dir=MODEL_CACHE,
             trust_remote_code=True,
         )
-        self.model.to("cuda:0")
+        self.model.to("cuda")
 
     def predict(
         self,
-        prompt: str = Input(description="Input prompt", default="A chat between a curious user and an artificial intelligence assistant. The assistant gives helpful, detailed, and polite answers to the user's questions. USER: <image>\nExplain it in one sentence. ASSISTANT:"),
         image: Path = Input(description="Input image"),
+        prompt: str = Input(description="Input prompt"),
         max_new_tokens: int = Input(description="Maximum number of tokens to generate", default=100),
         temperature: float = Input(description="Temperature for sampling", default=0.7),
         top_p: float = Input(description="Top p for sampling", default=0.95),
@@ -36,7 +34,7 @@ class Predictor(BasePredictor):
         prompt_template = f"A chat between a curious user and an artificial intelligence assistant. The assistant gives helpful, detailed, and polite answers to the user's questions. USER: <image>\n{prompt}. ASSISTANT:"
         input_ids = self.tokenizer(prompt_template, return_tensors="pt").input_ids
         image = Image.open(image)
-        image_tensor = self.model.image_preprocess(image).to("cuda:0")
+        image_tensor = self.model.image_preprocess(image).to("cuda")
         
         output_ids = self.model.generate(
             input_ids,
