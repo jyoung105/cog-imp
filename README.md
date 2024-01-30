@@ -2,7 +2,7 @@
 
 # MILVLG/imp Cog model
 
-https://replicate.com/jyoung105/honeybee
+https://replicate.com/jyoung105/imp
 
 This is an implementation of [MILVLG/imp](https://github.com/MILVLG/imp) as a [Cog](https://github.com/replicate/cog) model.
 
